@@ -9,16 +9,20 @@
  *    - Fetch /library/{slug}       → description, capabilities, pulls.
  *    - Fetch /library/{slug}/tags  → tag variants with size, params, context, quantization.
  * 3. Write structured JSON to out/ollama_models.json.
- * 4. Compare against src/data/models.ts and report missing models.
+ * 4. Compare against packages/models/src/index.ts and report missing models.
  *
  * Usage:
  *   pnpm exec tsx scripts/scrape-ollama.ts
  *   pnpm exec tsx scripts/scrape-ollama.ts --limit 10
  *   pnpm exec tsx scripts/scrape-ollama.ts --out src/data/ollama-catalog.json
+ *   pnpm exec tsx scripts/scrape-ollama.ts --report-file out/missing-models.md
  */
 
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from "fs";
 import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const scriptDir = dirname(fileURLToPath(import.meta.url));
 
 const BASE = "https://ollama.com";
 const UA =
@@ -410,6 +414,29 @@ async function pool<T>(
   );
 }
 
+// Parses Ollama's relative "updated" strings (e.g. "6 days ago", "4 months
+// ago", "yesterday") into an approximate day count, for recency sorting.
+function daysAgo(updated: string | null): number {
+  if (!updated) return Infinity;
+  const s = updated.toLowerCase().trim();
+  if (s === "today") return 0;
+  if (s === "yesterday") return 1;
+
+  const match = s.match(/(\d+)\s*(hour|day|week|month|year)s?\s*ago/);
+  if (!match) return Infinity;
+
+  const n = Number(match[1]);
+  const unit = match[2];
+  const perDay: Record<string, number> = {
+    hour: 1 / 24,
+    day: 1,
+    week: 7,
+    month: 30,
+    year: 365,
+  };
+  return n * (perDay[unit] ?? Infinity);
+}
+
 // ── Main ──────────────────────────────────────────────────
 
 async function main() {
@@ -418,6 +445,8 @@ async function main() {
   const limit = limitIdx !== -1 ? parseInt(args[limitIdx + 1]) || 0 : 0;
   const outIdx = args.indexOf("--out");
   const outPath = outIdx !== -1 ? args[outIdx + 1] : "out/ollama_models.json";
+  const reportIdx = args.indexOf("--report-file");
+  const reportPath = reportIdx !== -1 ? args[reportIdx + 1] : null;
 
   console.log("🔍 Ultimate Ollama Scraper");
   console.log("=".repeat(60));
@@ -532,12 +561,12 @@ async function main() {
     );
   }
 
-  // 6. Check for models missing from models.ts
-  const modelsPath = join(import.meta.dir, "../src/data/models.ts");
+  // 6. Check for models missing from packages/models/src/index.ts
+  const modelsPath = join(scriptDir, "../packages/models/src/index.ts");
   if (existsSync(modelsPath)) {
     const content = readFileSync(modelsPath, "utf-8");
 
-    // Extract all ollamaId values from models.ts
+    // Extract all ollamaId values from the model catalog
     const ollamaIds = new Set<string>();
     const idPattern = /ollamaId:\s*["']([^"']+)["']/g;
     let idMatch: RegExpExecArray | null;
@@ -552,37 +581,41 @@ async function main() {
 
     console.log(`\n  ━━━ Coverage Report ━━━`);
     console.log(
-      `  In models.ts: ${present.length}/${allModels.length} (${Math.round((present.length / allModels.length) * 100)}%)`
+      `  In catalog: ${present.length}/${allModels.length} (${Math.round((present.length / allModels.length) * 100)}%)`
     );
     console.log(`  Missing: ${missing.length} models\n`);
 
-    if (missing.length > 0) {
-      // Filter to only show interesting models (not embedding, not tiny)
-      const interestingMissing = missing.filter(
+    // Filter to only show interesting models (not embedding, not tiny),
+    // sorted so the most recently updated (i.e. most likely to be a genuine
+    // new release rather than a long-superseded legacy model) come first.
+    const interestingMissing = missing
+      .filter(
         (m) =>
           !m.capabilities.includes("embedding") &&
           m.pulls !== null &&
           m.pulls > 500
-      );
+      )
+      .sort((a, b) => daysAgo(a.updated) - daysAgo(b.updated));
 
-      const boringMissing = missing.filter(
-        (m) =>
-          m.capabilities.includes("embedding") ||
-          m.pulls === null ||
-          m.pulls <= 500
-      );
+    const boringMissing = missing.filter(
+      (m) =>
+        m.capabilities.includes("embedding") ||
+        m.pulls === null ||
+        m.pulls <= 500
+    );
 
+    if (missing.length > 0) {
       if (interestingMissing.length > 0) {
         console.log(
-          `  🔴 ${interestingMissing.length} INTERESTING models missing (>500 pulls, not embedding):`
+          `  🔴 ${interestingMissing.length} INTERESTING models missing (>500 pulls, not embedding, newest first):`
         );
         console.log(
-          `  ${"Slug".padEnd(32)} ${"Pulls".padStart(12)} ${"Params".padEnd(10)} ${"Caps".padEnd(30)} ${"Blurb"}`
+          `  ${"Slug".padEnd(32)} ${"Updated".padEnd(14)} ${"Pulls".padStart(12)} ${"Params".padEnd(10)} ${"Caps".padEnd(30)} ${"Blurb"}`
         );
-        console.log("  " + "─".repeat(110));
+        console.log("  " + "─".repeat(124));
         for (const m of interestingMissing) {
           console.log(
-            `  ${m.slug.padEnd(32)} ${(m.pulls_text || "-").padStart(12)} ${(m.default_params || "?").padEnd(10)} ${(m.capabilities.join(", ") || "-").padEnd(30)} ${(m.blurb || "-").slice(0, 40)}`
+            `  ${m.slug.padEnd(32)} ${(m.updated || "-").padEnd(14)} ${(m.pulls_text || "-").padStart(12)} ${(m.default_params || "?").padEnd(10)} ${(m.capabilities.join(", ") || "-").padEnd(30)} ${(m.blurb || "-").slice(0, 40)}`
           );
         }
       }
@@ -597,6 +630,32 @@ async function main() {
           );
         }
       }
+    }
+
+    // 7. Optional Markdown checklist for use as a PR body (report-only —
+    // this never writes AIModel entries itself, just surfaces candidates).
+    if (reportPath) {
+      const lines = [
+        `# Ollama catalog scrape — ${new Date().toISOString().slice(0, 10)}`,
+        "",
+        `Coverage: ${present.length}/${allModels.length} models in \`packages/models/src/index.ts\` (${Math.round((present.length / allModels.length) * 100)}%).`,
+        "",
+        `## New/updated models to review (${interestingMissing.length}, newest first)`,
+        "",
+        "- [ ] " +
+          interestingMissing
+            .map(
+              (m) =>
+                `**${m.slug}** — ${m.updated || "unknown"}, ${m.pulls_text || "?"} pulls, ${m.default_params || "?"} params — ${m.blurb || ""}`
+            )
+            .join("\n- [ ] "),
+        "",
+      ];
+      const reportDir = dirname(reportPath);
+      if (reportDir && reportDir !== ".")
+        mkdirSync(reportDir, { recursive: true });
+      writeFileSync(reportPath, lines.join("\n"));
+      console.log(`\n  Wrote ${reportPath}`);
     }
   }
 

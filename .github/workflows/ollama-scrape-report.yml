@@ -1,0 +1,59 @@
+name: Ollama catalog scrape report
+
+# Weekly, report-only: refreshes out/ollama_models.json and opens a PR
+# with a checklist of new/updated Ollama models that aren't yet in
+# packages/models/src/index.ts. It never writes AIModel entries itself —
+# a human reviews the checklist and adds entries by hand, since the
+# scraped data lacks fields like family/provider/description/license.
+#
+# KNOWN ISSUE: ollama.com's frontend was redesigned and scripts/scrape-ollama.ts's
+# HTML parsing (search page, /library/{slug}, /library/{slug}/tags) is currently
+# broken against the new markup — it will discover 0 models until the parser is
+# updated to match the new page structure. This workflow is wired up correctly
+# and will start producing useful reports as soon as that follow-up fix lands.
+
+on:
+  schedule:
+    - cron: "0 23 * * 0" # Sundays 23:00 (Spain)
+      timezone: "Europe/Madrid"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.3
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Scrape Ollama catalog
+        run: pnpm exec tsx scripts/scrape-ollama.ts --report-file out/missing-models.md
+
+      - name: Open PR with refreshed data
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore: weekly Ollama catalog scrape"
+          title: "chore: weekly Ollama model scrape (${{ github.run_id }})"
+          body-path: out/missing-models.md
+          branch: ollama-scrape-report
+          delete-branch: true
+          add-paths: |
+            out/ollama_models.json
+            out/missing-models.md
