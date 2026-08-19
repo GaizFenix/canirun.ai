@@ -371,7 +371,18 @@ function parseTags(html: string, model: OllamaModel): void {
   const defaultVar =
     variants.find((v) => v.tag.endsWith(":latest")) || variants[0];
   if (defaultVar) {
-    model.default_params = defaultVar.params;
+    // The ":latest" tag name has no size in it, so its own params regex
+    // match is always null — infer it from a sibling variant that shares
+    // the same size in bytes (e.g. an explicit "8b" tag) instead.
+    let params = defaultVar.params;
+    if (!params && defaultVar.size_bytes) {
+      const sibling = variants.find(
+        (v) =>
+          v !== defaultVar && v.params && v.size_bytes === defaultVar.size_bytes
+      );
+      if (sibling) params = sibling.params;
+    }
+    model.default_params = params;
     model.default_size = defaultVar.size_text;
   }
 
@@ -440,6 +451,17 @@ function daysAgo(updated: string | null): number {
     year: 365,
   };
   return n * (perDay[unit] ?? Infinity);
+}
+
+// Formats a model's default params for display, flagging that it's just
+// the default when the model has more than one tagged version (since in
+// that case the params shown don't describe every variant).
+function formatParams(model: OllamaModel): string {
+  if (!model.default_params) return "?";
+  const versions = model.tags_count ?? model.variants.length;
+  return versions > 1
+    ? `${model.default_params} params (default)`
+    : `${model.default_params} params`;
 }
 
 // ── Main ──────────────────────────────────────────────────
@@ -590,37 +612,36 @@ async function main() {
     );
     console.log(`  Missing: ${missing.length} models\n`);
 
-    // Filter to only show interesting models (not embedding, not tiny),
-    // sorted so the most recently updated (i.e. most likely to be a genuine
-    // new release rather than a long-superseded legacy model) come first.
+    // Filter to only show interesting models: not embedding, popular enough
+    // to matter (>100K pulls), and recent enough to be a genuine current
+    // release rather than a long-superseded legacy model (updated within
+    // the last year). Sorted with the most recently updated first.
+    const MIN_PULLS = 100_000;
+    const MAX_AGE_DAYS = 365;
+    const isInteresting = (m: OllamaModel) =>
+      !m.capabilities.includes("embedding") &&
+      m.pulls !== null &&
+      m.pulls > MIN_PULLS &&
+      daysAgo(m.updated) <= MAX_AGE_DAYS;
+
     const interestingMissing = missing
-      .filter(
-        (m) =>
-          !m.capabilities.includes("embedding") &&
-          m.pulls !== null &&
-          m.pulls > 500
-      )
+      .filter(isInteresting)
       .sort((a, b) => daysAgo(a.updated) - daysAgo(b.updated));
 
-    const boringMissing = missing.filter(
-      (m) =>
-        m.capabilities.includes("embedding") ||
-        m.pulls === null ||
-        m.pulls <= 500
-    );
+    const boringMissing = missing.filter((m) => !isInteresting(m));
 
     if (missing.length > 0) {
       if (interestingMissing.length > 0) {
         console.log(
-          `  🔴 ${interestingMissing.length} INTERESTING models missing (>500 pulls, not embedding, newest first):`
+          `  🔴 ${interestingMissing.length} INTERESTING models missing (>${MIN_PULLS.toLocaleString()} pulls, updated within ${MAX_AGE_DAYS} days, not embedding, newest first):`
         );
         console.log(
-          `  ${"Slug".padEnd(32)} ${"Updated".padEnd(14)} ${"Pulls".padStart(12)} ${"Params".padEnd(10)} ${"Caps".padEnd(30)} ${"Blurb"}`
+          `  ${"Slug".padEnd(32)} ${"Updated".padEnd(14)} ${"Pulls".padStart(12)} ${"Params".padEnd(20)} ${"Caps".padEnd(30)} ${"Blurb"}`
         );
         console.log("  " + "─".repeat(124));
         for (const m of interestingMissing) {
           console.log(
-            `  ${m.slug.padEnd(32)} ${(m.updated || "-").padEnd(14)} ${(m.pulls_text || "-").padStart(12)} ${(m.default_params || "?").padEnd(10)} ${(m.capabilities.join(", ") || "-").padEnd(30)} ${(m.blurb || "-").slice(0, 40)}`
+            `  ${m.slug.padEnd(32)} ${(m.updated || "-").padEnd(14)} ${(m.pulls_text || "-").padStart(12)} ${formatParams(m).padEnd(20)} ${(m.capabilities.join(", ") || "-").padEnd(30)} ${(m.blurb || "-").slice(0, 40)}`
           );
         }
       }
@@ -651,7 +672,7 @@ async function main() {
           interestingMissing
             .map(
               (m) =>
-                `**${m.slug}** — ${m.updated || "unknown"}, ${m.pulls_text || "?"} pulls, ${m.default_params || "?"} params — ${m.blurb || ""}`
+                `**${m.slug}** — ${m.updated || "unknown"}, ${m.pulls_text || "?"} pulls, ${formatParams(m)} — ${m.blurb || ""}`
             )
             .join("\n- [ ] "),
         "",
