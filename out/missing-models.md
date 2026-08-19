@@ -1,7 +1,192 @@
 # Ollama catalog scrape — 2026-08-19
 
-Coverage: 0/0 models in `packages/models/src/index.ts` (NaN%).
+Coverage: 36/234 models in `packages/models/src/index.ts` (15%).
 
-## New/updated models to review (0, newest first)
+## New/updated models to review (186, newest first)
 
-- [ ] 
+- [ ] **gemma4** — 4 days ago, 22.7M pulls, e2b params — Gemma 4 models are designed to deliver frontier-level performance at each size. They are well-suited for reasoning, agentic workflows, coding, and multimodal understanding.
+- [ ] **muse-glimmer** — 4 days ago, 138.2K pulls, 30b params — Meta&#39;s latest open model built for always-on local agents. 30B parameters, licensed under Apache 2.0 and runs on a single GPU — tuned for tool use, long tasks, and failure recovery.
+- [ ] **deepseek-v4-pro** — 5 days ago, 342.1K pulls, ? params — DeepSeek-V4-Pro is a frontier Mixture-of-Experts model with a large context window and three reasoning modes.
+- [ ] **nemotron-3.5-lightning** — 1 week ago, 38.2K pulls, 30b params — NVIDIA Nemotron 3.5 Lightning is an open 30B mixture-of-experts (MoE) model with 3B active parameters built for always-on agents.
+- [ ] **deepseek-v4-flash** — 2 weeks ago, 377.7K pulls, ? params — DeepSeek-V4-Flash is a preview of the DeepSeek-V4 series, a Mixture-of-Experts model with 284B total parameters and 13B activated, built for efficient reasoning across a 1M-token context window.
+- [ ] **laguna-xs-2.1** — 3 weeks ago, 93.5K pulls, ? params — Laguna XS 2.1 is a 33B total parameter Mixture-of-Experts model with 3B activated parameters per token designed for agentic coding and long-horizon work on a local machine.
+- [ ] **laguna-s-2.1** — 3 weeks ago, 91.9K pulls, ? params — Our most capable model to date, designed for long-horizon work. 70.2% on Terminal-Bench 2.1 at 118B-A8B.
+- [ ] **kimi-k3** — 3 weeks ago, 40.9K pulls, ? params — Kimi K3 is an open-weight, native multimodal agentic model and our most capable model to date.
+- [ ] **laguna-xs.2** — 3 weeks ago, 25.9K pulls, ? params — Laguna XS.2 is a 33B total parameter Mixture-of-Experts model with 3B activated parameters per token designed for agentic coding and long-horizon work on a local machine.
+- [ ] **glm-4.7-flash** — 2 months ago, 1.5M pulls, ? params — As the strongest model in the 30B class, GLM-4.7-Flash offers a new option for lightweight deployment that balances performance and efficiency.
+- [ ] **minimax-m3** — 2 months ago, 436.5K pulls, ? params — MiniMax M3: Coding &amp; Agentic Frontier. 1M context window. Native Multimodality.
+- [ ] **glm-5.2** — 2 months ago, 321.1K pulls, ? params — GLM-5.2 is Z.ai’s flagship model for the era of long-horizon tasks.
+- [ ] **kimi-k2.7-code** — 2 months ago, 219K pulls, ? params — Kimi K2.7 Code is Moonshot AI&#39;s coding-focused agentic model built upon Kimi K2.6, with substantial improvements on real-world long-horizon coding tasks and roughly 30% lower thinking-token usage.
+- [ ] **lfm2.5** — 2 months ago, 118.8K pulls, 8b params — LFM2.5-8B-A1B, an edge model built for fast, reliable tool calling on consumer hardware.
+- [ ] **nemotron-3-ultra** — 2 months ago, 52.1K pulls, ? params — NVIDIA Nemotron 3 Ultra is built for high-throughput reasoning and long-running agent workflows.
+- [ ] **north-mini-code-1.0** — 2 months ago, 42.6K pulls, ? params — North Mini Code is Cohere&#39;s first model for developers — a 30B Mixture-of-Experts model with 3B active parameters, built for agentic software engineering.
+- [ ] **minicpm-v4.6** — 2 months ago, 35.2K pulls, 1b params — A Pocket-Sized MLLM for Ultra-Efficient Image and Video Understanding on Your Phone
+- [ ] **minicpm-v4.5** — 2 months ago, 27.5K pulls, 8b params — A GPT-4o Level MLLM for Single Image, Multi Image and High-FPS Video Understanding on Your Phone
+- [ ] **granite4.1-guardian** — 2 months ago, 10.3K pulls, 8b params — Granite Guardian 4.1 is a specialized safety and judging model from IBM Research that evaluates whether LLM prompts and responses meet specified harm criteria.
+- [ ] **nemotron3** — 3 months ago, 646K pulls, 33b params — NVIDIA Nemotron 3 Nano Omni is a multimodal large language model that unifies video, audio, image, and text understanding to support enterprise-grade Q&amp;A, summarization, transcription, and document intelligence workflows.
+- [ ] **granite4.1** — 3 months ago, 351.6K pulls, 3b params — IBM Granite Models are a family of enterprise-ready, open foundation models that support multilingual capabilities, coding, retrieval-augmented generation (RAG), tool use, and structured JSON output. Released under Apache 2.0 license.
+- [ ] **mistral-medium-3.5** — 3 months ago, 340.6K pulls, 128b params — Mistral Medium 3.5 is the first flagship model of Mistral AI that merged instruction-following, reasoning, and coding in a single set of 128B weights.
+- [ ] **glm-5.1** — 4 months ago, 2.3M pulls, ? params — GLM-5.1 is our next-generation flagship model for agentic engineering, with significantly stronger coding capabilities than its predecessor. It achieves state-of-the-art performance on SWE-Bench Pro and leads GLM-5 by a wide margin.
+- [ ] **kimi-k2.6** — 4 months ago, 438.2K pulls, ? params — Kimi K2.6 is an open-source, native multimodal agentic model that advances practical capabilities in long-horizon coding, coding-driven design, proactive autonomous execution, and swarm-based task orchestration.
+- [ ] **medgemma** — 4 months ago, 287.1K pulls, 4b params — MedGemma is a collection of Gemma 3 variants that are trained for performance on medical text and image comprehension.
+- [ ] **medgemma1.5** — 4 months ago, 134.8K pulls, 4b params — MedGemma 1.5 4B is an updated version of the MedGemma 4B model.
+- [ ] **nemotron-3-super** — 5 months ago, 2.9M pulls, 120b params — NVIDIA Nemotron 3 Super is a 120B open MoE model activating just 12B parameters to deliver maximum compute efficiency and accuracy for complex multi-agent applications.
+- [ ] **minimax-m2.7** — 5 months ago, 2.4M pulls, ? params — MiniMax&#39;s M2-series model for coding, agentic workflows, and professional productivity.
+- [ ] **nemotron-cascade-2** — 5 months ago, 142.4K pulls, 30b params — An open 30B MoE model from NVIDIA with 3B activated parameters that delivers strong reasoning and agentic capabilities.
+- [ ] **glm-ocr** — 6 months ago, 7M pulls, ? params — GLM-OCR is a multimodal OCR model for complex document understanding, built on the GLM-V encoder–decoder architecture.
+- [ ] **translategemma** — 7 months ago, 2.1M pulls, 4b params — A new collection of open translation models built on Gemma 3, helping people communicate across 55 languages.
+- [ ] **lfm2.5-thinking** — 7 months ago, 1.3M pulls, 1.2b params — LFM2.5 is a new family of hybrid models designed for on-device deployment.
+- [ ] **rnj-1** — 8 months ago, 502.9K pulls, 8b params — Rnj-1 is a family of 8B parameter open-weight, dense models trained from scratch by Essential AI, optimized for code and STEM with capabilities on par with SOTA open-weight models.
+- [ ] **olmo-3** — 8 months ago, 450K pulls, 7b params — Olmo is a series of Open language models designed to enable the science of language models. These models are pre-trained on the Dolma 3 dataset and post-trained on the Dolci datasets.
+- [ ] **olmo-3.1** — 8 months ago, 285.4K pulls, 32b params — Olmo is a series of Open language models designed to enable the science of language models. These models are pre-trained on the Dolma 3 dataset and post-trained on the Dolci datasets.
+- [ ] **functiongemma** — 8 months ago, 181.9K pulls, 270m params — FunctionGemma is a specialized version of Google&#39;s Gemma 3 270M model fine-tuned explicitly for function calling.
+- [ ] **mistral-large-3** — 8 months ago, 92.2K pulls, 675b params — A general-purpose multimodal mixture-of-experts model for production-grade tasks and enterprise workloads.
+- [ ] **granite4** — 9 months ago, 1.4M pulls, 350m params — Granite 4 features improved instruction following (IF) and tool-calling capabilities, making them more effective in enterprise applications.
+- [ ] **deepseek-ocr** — 9 months ago, 515.4K pulls, 3b params — DeepSeek-OCR is a vision-language model that can perform token-efficient OCR.
+- [ ] **cogito-2.1** — 9 months ago, 220.7K pulls, 671b params — The Cogito v2.1 LLMs are instruction tuned generative models. All models are released under MIT license for commercial use.
+- [ ] **gpt-oss-safeguard** — 9 months ago, 151.7K pulls, 20b params — gpt-oss-safeguard-20b and gpt-oss-safeguard-120b are safety reasoning models built-upon gpt-oss
+- [ ] **qwen2** — 1 year ago, 6.1M pulls, 0.5b params — Qwen2 is a new series of large language models from Alibaba group
+- [ ] **minicpm-v** — 1 year ago, 5.4M pulls, 8b params — A series of multimodal LLMs (MLLMs) designed for vision-language understanding.
+- [ ] **qwen2.5vl** — 1 year ago, 4.4M pulls, 3b params — Flagship vision-language model of Qwen and also a significant leap from the previous Qwen2-VL.
+- [ ] **dolphin3** — 1 year ago, 4M pulls, 8b params — Dolphin 3.0 Llama 3.1 8B 🐬 is the next generation of the Dolphin series of instruct-tuned models designed to be the ultimate general purpose local model, enabling coding, math, agentic, function calling, and general use cases.
+- [ ] **smollm2** — 1 year ago, 3.9M pulls, 135m params — SmolLM2 is a family of compact language models available in three size: 135M, 360M, and 1.7B parameters.
+- [ ] **deepseek-v3** — 1 year ago, 3.8M pulls, 671b params — A strong Mixture-of-Experts (MoE) language model with 671B total parameters with 37B activated for each token.
+- [ ] **olmo2** — 1 year ago, 3.7M pulls, 7b params — OLMo 2 is a new family of 7B and 13B models trained on up to 5T tokens. These models are on par with or better than equivalently sized fully open models, and competitive with open-weight models such as Llama 3.1 on English academic benchmarks.
+- [ ] **granite3.1-moe** — 1 year ago, 3M pulls, 1b params — The IBM Granite 1B and 3B models are long-context mixture of experts (MoE) Granite models from IBM designed for low latency usage.
+- [ ] **deepseek-coder-v2** — 1 year ago, 3M pulls, 16b params — An open-source Mixture-of-Experts code language model that achieves performance comparable to GPT4-Turbo in code-specific tasks.
+- [ ] **starcoder2** — 1 year ago, 2.9M pulls, 3b params — StarCoder2 is the next generation of transparently trained open code LLMs that comes in three sizes: 3B, 7B and 15B parameters.
+- [ ] **falcon3** — 1 year ago, 2.6M pulls, 1b params — A family of efficient AI models under 10B parameters performant in science, math, and coding through innovative training techniques.
+- [ ] **mistral-small3.2** — 1 year ago, 2.4M pulls, 24b params — An update to Mistral Small that improves on function calling, instruction following, and less repetition errors.
+- [ ] **qwq** — 1 year ago, 2.3M pulls, 32b params — QwQ is the reasoning model of the Qwen series.
+- [ ] **cogito** — 1 year ago, 2.1M pulls, 3b params — Cogito v1 Preview is a family of hybrid reasoning models by Deep Cogito that outperform the best available open models of the same size, including counterparts from LLaMA, DeepSeek, and Qwen across most standard benchmarks.
+- [ ] **smollm** — 1 year ago, 2.1M pulls, 135m params — 🪐 A family of small models with 135M, 360M, and 1.7B parameters, trained on a new high-quality dataset.
+- [ ] **gemma3n** — 1 year ago, 2M pulls, e2b params — Gemma 3n models are designed for efficient execution on everyday devices such as laptops, tablets or phones.
+- [ ] **dolphin-mixtral** — 1 year ago, 1.9M pulls, 8x7b params — Uncensored, 8x7b and 8x22b fine-tuned models based on the Mixtral mixture of experts models that excels at coding tasks. Created by Eric Hartford.
+- [ ] **phi4-reasoning** — 1 year ago, 1.7M pulls, 14b params — Phi 4 reasoning and reasoning plus are 14-billion parameter open-weight reasoning models that rival much larger models on complex reasoning tasks.
+- [ ] **hermes3** — 1 year ago, 1.6M pulls, 3b params — Hermes 3 is the latest version of the flagship Hermes series of LLMs by Nous Research
+- [ ] **magistral** — 1 year ago, 1.5M pulls, 24b params — Magistral is a small, efficient reasoning model with 24B parameters.
+- [ ] **granite-code** — 1 year ago, 1.5M pulls, 3b params — A family of open foundation models by IBM for Code Intelligence
+- [ ] **phi4-mini** — 1 year ago, 1.4M pulls, 3.8b params — Phi-4-mini brings significant enhancements in multilingual support, reasoning, and mathematics, and now, the long-awaited function calling feature is finally supported.
+- [ ] **deepscaler** — 1 year ago, 1.3M pulls, 1.5b params — A fine-tuned version of Deepseek-R1-Distilled-Qwen-1.5B that surpasses the performance of OpenAI’s o1-preview with just 1.5B parameters on popular math evaluations.
+- [ ] **mistral-large** — 1 year ago, 1.3M pulls, 123b params — Mistral Large 2 is Mistral&#39;s new flagship model that is significantly more capable in code generation, mathematics, and reasoning with 128k context window and support for dozens of languages.
+- [ ] **codestral** — 1 year ago, 1.3M pulls, 22b params — Codestral is Mistral AI’s first-ever code model designed for code generation tasks.
+- [ ] **openthinker** — 1 year ago, 1.2M pulls, 7b params — A fully open-source family of reasoning models built using a dataset derived by distilling DeepSeek-R1.
+- [ ] **granite3.3** — 1 year ago, 1.1M pulls, 2b params — IBM Granite 2B and 8B models are 128K context length language models that have been fine-tuned for improved reasoning and instruction-following capabilities.
+- [ ] **qwen2-math** — 1 year ago, 1.1M pulls, 1.5b params — Qwen2 Math is a series of specialized math language models built upon the Qwen2 LLMs, which significantly outperforms the mathematical capabilities of open-source models and even closed-source models (e.g., GPT4o).
+- [ ] **devstral** — 1 year ago, 1M pulls, 24b params — Devstral: the best open source model for coding agents
+- [ ] **granite3.1-dense** — 1 year ago, 1M pulls, 2b params — The IBM Granite 2B and 8B models are text-only dense LLMs trained on over 12 trillion tokens of data, demonstrated significant improvements over their predecessors in performance and speed in IBM’s initial testing.
+- [ ] **granite3-dense** — 1 year ago, 1M pulls, 2b params — The IBM Granite 2B and 8B models are designed to support tool-based use cases and support for retrieval augmented generation (RAG), streamlining code generation, translation and bug fixing.
+- [ ] **llama-guard3** — 1 year ago, 1M pulls, 1b params — Llama Guard 3 is a series of models fine-tuned for content safety classification of LLM inputs and responses.
+- [ ] **yi-coder** — 1 year ago, 1M pulls, 1.5b params — Yi-Coder is a series of open-source code language models that delivers state-of-the-art coding performance with fewer than 10 billion parameters.
+- [ ] **aya-expanse** — 1 year ago, 997.5K pulls, 8b params — Cohere For AI&#39;s language models trained to perform well across 23 different languages.
+- [ ] **granite3.2-vision** — 1 year ago, 975.4K pulls, 2b params — A compact and efficient vision-language model, specifically designed for visual document understanding, enabling automated content extraction from tables, charts, infographics, plots, diagrams, and more.
+- [ ] **deepcoder** — 1 year ago, 942.8K pulls, 1.5b params — DeepCoder is a fully open-Source 14B coder model at O3-mini level, with a 1.5B version also available.
+- [ ] **granite3-moe** — 1 year ago, 941.3K pulls, 1b params — The IBM Granite 1B and 3B models are the first mixture of experts (MoE) Granite models from IBM designed for low latency usage.
+- [ ] **shieldgemma** — 1 year ago, 917.6K pulls, 2b params — ShieldGemma is set of instruction tuned models for evaluating the safety of text prompt input and text output responses against a set of defined safety policies.
+- [ ] **reader-lm** — 1 year ago, 916.1K pulls, 0.5b params — A series of models that convert HTML content to Markdown content, which is useful for content conversion tasks.
+- [ ] **command-r-plus** — 1 year ago, 790.8K pulls, 104b params — Command R&#43; is a powerful, scalable large language model purpose-built to excel at real-world enterprise use cases.
+- [ ] **mistral-small3.1** — 1 year ago, 778.9K pulls, 24b params — Building upon Mistral Small 3, Mistral Small 3.1 (2503) adds state-of-the-art vision understanding and enhances long context capabilities up to 128k tokens without compromising text performance.
+- [ ] **exaone-deep** — 1 year ago, 759.6K pulls, 2.4b params — EXAONE Deep exhibits superior capabilities in various reasoning tasks including math and coding benchmarks, ranging from 2.4B to 32B parameters developed and released by LG AI Research.
+- [ ] **nemotron-mini** — 1 year ago, 700.9K pulls, 4b params — A commercial-friendly small language model by NVIDIA optimized for roleplay, RAG QA, and function calling.
+- [ ] **opencoder** — 1 year ago, 628.7K pulls, 1.5b params — OpenCoder is an open and reproducible code LLM family which includes 1.5B and 8B models, supporting chat in English and Chinese languages.
+- [ ] **reflection** — 1 year ago, 610.5K pulls, 70b params — A high-performing model trained with a new technique called Reflection-tuning that teaches a LLM to detect mistakes in its reasoning and correct course.
+- [ ] **nemotron** — 1 year ago, 608.9K pulls, 70b params — Llama-3.1-Nemotron-70B-Instruct is a large language model customized by NVIDIA to improve the helpfulness of LLM generated responses to user queries.
+- [ ] **nous-hermes2-mixtral** — 1 year ago, 583.6K pulls, 8x7b params — The Nous Hermes 2 model from Nous Research, now trained over Mixtral.
+- [ ] **athene-v2** — 1 year ago, 582.8K pulls, 72b params — Athene-V2 is a 72B parameter model which excels at code completion, mathematics, and log extraction tasks.
+- [ ] **solar-pro** — 1 year ago, 551.2K pulls, 22b params — Solar Pro Preview: an advanced large language model (LLM) with 22 billion parameters designed to fit into a single GPU
+- [ ] **exaone3.5** — 1 year ago, 546K pulls, 2.4b params — EXAONE 3.5 is a collection of instruction-tuned bilingual (English and Korean) generative models ranging from 2.4B to 32B parameters, developed and released by LG AI Research.
+- [ ] **bespoke-minicheck** — 1 year ago, 521.8K pulls, 7b params — A state-of-the-art fact-checking model developed by Bespoke Labs.
+- [ ] **granite3.2** — 1 year ago, 451K pulls, 2b params — Granite-3.2 is a family of long-context AI models from IBM Granite fine-tuned for thinking capabilities.
+- [ ] **r1-1776** — 1 year ago, 416.8K pulls, 70b params — A version of the DeepSeek-R1 model that has been post trained to provide unbiased, accurate, and factual information by Perplexity.
+- [ ] **sailor2** — 1 year ago, 407.9K pulls, 1b params — Sailor2 are multilingual language models made for South-East Asia. Available in 1B, 8B, and 20B parameter sizes.
+- [ ] **tulu3** — 1 year ago, 385.5K pulls, 8b params — Tülu 3 is a leading instruction following model family, offering fully open-source data, code, and recipes by the The Allen Institute for AI.
+- [ ] **granite3-guardian** — 1 year ago, 331.5K pulls, 2b params — The IBM Granite Guardian 3.0 2B and 8B models are designed to detect risks in prompts and/or responses.
+- [ ] **command-r7b** — 1 year ago, 295.2K pulls, 7b params — The smallest model in Cohere&#39;s R series delivers top-tier speed, efficiency, and quality to build powerful AI applications on commodity GPUs and edge devices.
+- [ ] **deepseek-v2.5** — 1 year ago, 285.5K pulls, 236b params — An upgraded version of DeekSeek-V2  that integrates the general and coding abilities of both DeepSeek-V2-Chat and DeepSeek-Coder-V2-Instruct.
+- [ ] **smallthinker** — 1 year ago, 255.7K pulls, 3b params — A new small reasoning model fine-tuned from the Qwen 2.5 3B Instruct model.
+- [ ] **command-a** — 1 year ago, 224.7K pulls, 111b params — 111 billion parameter model optimized for demanding enterprises that require fast, secure, and high-quality AI
+- [ ] **marco-o1** — 1 year ago, 210.1K pulls, 7b params — An open large reasoning model for real-world solutions by the Alibaba International Digital Commerce Group (AIDC-AI).
+- [ ] **command-r7b-arabic** — 1 year ago, 201K pulls, 7b params — A new state-of-the-art version of the lightweight Command R7B model that excels in advanced Arabic language capabilities for enterprises in the Middle East and Northern Africa.
+- [ ] **llama3** — 2 years ago, 25M pulls, 8b params — Meta Llama 3: The most capable openly available LLM to date
+- [ ] **phi3** — 2 years ago, 18M pulls, 3.8b params — Phi-3 is a family of lightweight 3B (Mini) and 14B (Medium) state-of-the-art open models by Microsoft.
+- [ ] **llava** — 2 years ago, 14.6M pulls, 7b params — 🌋 LLaVA is a novel end-to-end trained large multimodal model that combines a vision encoder and Vicuna for general-purpose visual and language understanding. Updated to version 1.6.
+- [ ] **qwen** — 2 years ago, 7.6M pulls, 0.5b params — Qwen 1.5 is a series of large language models by Alibaba Cloud spanning from 0.5B to 110B parameters
+- [ ] **llama2** — 2 years ago, 7.4M pulls, 7b params — Llama 2 is a collection of foundation language models ranging from 7B to 70B parameters.
+- [ ] **gemma** — 2 years ago, 7.3M pulls, 2b params — Gemma is a family of lightweight, state-of-the-art open models built by Google DeepMind. Updated to version 1.1
+- [ ] **codellama** — 2 years ago, 6M pulls, 7b params — A large language model that can use text prompts to generate and discuss code.
+- [ ] **deepseek-coder** — 2 years ago, 4.5M pulls, 1.3b params — DeepSeek Coder is a capable coding model trained on two trillion code and natural language tokens.
+- [ ] **codegemma** — 2 years ago, 3.1M pulls, 2b params — CodeGemma is a collection of powerful, lightweight models that can perform a variety of coding tasks like fill-in-the-middle code completion, code generation, natural language understanding, mathematical reasoning, and instruction following.
+- [ ] **orca-mini** — 2 years ago, 3M pulls, 3b params — A general-purpose model ranging from 3 billion parameters to 70 billion, suitable for entry-level hardware.
+- [ ] **llama2-uncensored** — 2 years ago, 2.7M pulls, 7b params — Uncensored Llama 2 model by George Sung and Jarrad Hope.
+- [ ] **llava-llama3** — 2 years ago, 2.3M pulls, 8b params — A LLaVA model fine-tuned from Llama 3 Instruct with better scores in several benchmarks.
+- [ ] **dolphin-llama3** — 2 years ago, 2.1M pulls, 8b params — Dolphin 2.9 is a new model with 8B and 70B sizes by Eric Hartford based on Llama 3 that has a variety of instruction, conversational, and coding skills.
+- [ ] **moondream** — 2 years ago, 1.6M pulls, 1.8b params — moondream2 is a small vision language model designed to run efficiently on edge devices.
+- [ ] **dolphin-mistral** — 2 years ago, 1.6M pulls, 7b params — The uncensored Dolphin model based on Mistral that excels at coding tasks. Updated to version 2.8.
+- [ ] **dolphin-phi** — 2 years ago, 1.6M pulls, 2.7b params — 2.7B uncensored Dolphin model by Eric Hartford, based on the Phi language model by Microsoft Research.
+- [ ] **phi** — 2 years ago, 1.5M pulls, 2.7b params — Phi-2: a 2.7B language model by Microsoft Research that demonstrates outstanding reasoning and language understanding capabilities.
+- [ ] **sqlcoder** — 2 years ago, 1.5M pulls, 7b params — SQLCoder is a code completion model fined-tuned on StarCoder for SQL generation tasks
+- [ ] **yi** — 2 years ago, 1.4M pulls, 6b params — Yi 1.5 is a high-performing, bilingual language model.
+- [ ] **openchat** — 2 years ago, 1.3M pulls, 7b params — A family of open-source models trained on a wide variety of data, surpassing ChatGPT on various benchmarks. Updated to version 3.5-0106.
+- [ ] **wizard-vicuna-uncensored** — 2 years ago, 1.3M pulls, 7b params — Wizard Vicuna Uncensored is a 7B, 13B, and 30B parameter model based on Llama 2 uncensored by Eric Hartford.
+- [ ] **deepseek-v2** — 2 years ago, 1.2M pulls, 16b params — A strong, economical, and efficient Mixture-of-Experts language model.
+- [ ] **wizardlm2** — 2 years ago, 1.2M pulls, 7b params — State of the art large language model from Microsoft AI with improved performance on complex chat, multilingual, reasoning and agent use cases.
+- [ ] **deepseek-llm** — 2 years ago, 1.2M pulls, 7b params — An advanced language model crafted with 2 trillion bilingual tokens.
+- [ ] **zephyr** — 2 years ago, 1.2M pulls, 7b params — Zephyr is a series of fine-tuned versions of the Mistral and Mixtral models that are trained to act as helpful assistants.
+- [ ] **starcoder** — 2 years ago, 1.2M pulls, 1b params — StarCoder is a code generation model trained on 80&#43; programming languages.
+- [ ] **vicuna** — 2 years ago, 1.2M pulls, 7b params — General use chat model based on Llama and Llama 2 with 2K to 16K context sizes.
+- [ ] **nous-hermes** — 2 years ago, 1.2M pulls, 7b params — General use models based on Llama and Llama 2 from Nous Research.
+- [ ] **aya** — 2 years ago, 1.1M pulls, 8b params — Aya 23, released by Cohere, is a new family of state-of-the-art, multilingual models that support 23 languages.
+- [ ] **codeqwen** — 2 years ago, 1.1M pulls, 7b params — CodeQwen1.5 is a large language model pretrained on a large amount of code data.
+- [ ] **openhermes** — 2 years ago, 1.1M pulls, ? params — OpenHermes 2.5 is a 7B model fine-tuned by Teknium on Mistral with fully open datasets.
+- [ ] **stable-code** — 2 years ago, 1.1M pulls, 3b params — Stable Code 3B is a coding model with instruct and code completion variants on par with models such as Code Llama 7B that are 2.5x larger.
+- [ ] **nous-hermes2** — 2 years ago, 1.1M pulls, 10.7b params — The powerful family of models by Nous Research that excels at scientific discussion and coding tasks.
+- [ ] **neural-chat** — 2 years ago, 1.1M pulls, 7b params — A fine-tuned model based on Mistral with good coverage of domain and language.
+- [ ] **falcon** — 2 years ago, 1.1M pulls, 7b params — A large language model built by the Technology Innovation Institute (TII) for use in summarization, text generation, and chat bots.
+- [ ] **llama2-chinese** — 2 years ago, 1.1M pulls, 7b params — Llama 2 based model fine tuned to improve Chinese dialogue ability.
+- [ ] **llama3-chatqa** — 2 years ago, 1M pulls, 8b params — A model from NVIDIA based on Llama 3 that excels at conversational question answering (QA) and retrieval-augmented generation (RAG).
+- [ ] **stablelm2** — 2 years ago, 1M pulls, 1.6b params — Stable LM 2 is a state-of-the-art 1.6B and 12B parameter language model trained on multilingual data in English, Spanish, German, Italian, French, Portuguese, and Dutch.
+- [ ] **wizardcoder** — 2 years ago, 1M pulls, 33b params — State-of-the-art code generation model
+- [ ] **wizard-math** — 2 years ago, 1M pulls, 7b params — Model focused on math and logic problems
+- [ ] **internlm2** — 2 years ago, 999.5K pulls, 1m params — InternLM2.5 is a 7B parameter model tailored for practical scenarios with outstanding reasoning capability.
+- [ ] **dolphincoder** — 2 years ago, 995.5K pulls, 7b params — A 7B and 15B uncensored variant of the Dolphin model family that excels at coding, based on StarCoder2.
+- [ ] **samantha-mistral** — 2 years ago, 990.4K pulls, 7b params — A companion assistant trained in philosophy, psychology, and personal relationships. Based on Mistral.
+- [ ] **llama3-gradient** — 2 years ago, 988.4K pulls, 8b params — This model extends LLama-3 8B&#39;s context length from 8k to over 1m tokens.
+- [ ] **llama3-groq-tool-use** — 2 years ago, 983.3K pulls, 8b params — A series of models from Groq that represent a significant advancement in open-source AI capabilities for tool use/function calling.
+- [ ] **xwinlm** — 2 years ago, 978.7K pulls, 7b params — Conversational model based on Llama 2 that performs competitively on various benchmarks.
+- [ ] **starling-lm** — 2 years ago, 971.1K pulls, 7b params — Starling is a large language model trained by reinforcement learning from AI feedback focused on improving chatbot helpfulness.
+- [ ] **phind-codellama** — 2 years ago, 960.7K pulls, 34b params — Code generation model based on Code Llama.
+- [ ] **yarn-llama2** — 2 years ago, 959.8K pulls, 7b params — An extension of Llama 2 that supports a context of up to 128k tokens.
+- [ ] **solar** — 2 years ago, 954K pulls, 10.7b params — A compact, yet powerful 10.7B large language model designed for single-turn conversation.
+- [ ] **stable-beluga** — 2 years ago, 926.8K pulls, 7b params — Llama 2 based model fine tuned on an Orca-style dataset. Originally called Free Willy.
+- [ ] **orca2** — 2 years ago, 924K pulls, 7b params — Orca 2 is built by Microsoft research, and are a fine-tuned version of Meta&#39;s Llama 2 models.  The model is designed to excel particularly in reasoning.
+- [ ] **llama-pro** — 2 years ago, 899.7K pulls, ? params — An expansion of Llama 2 that specializes in integrating both general language understanding and domain-specific knowledge, particularly in programming and mathematics.
+- [ ] **wizardlm** — 2 years ago, 890.7K pulls, 7b params — General use model based on Llama 2.
+- [ ] **yarn-mistral** — 2 years ago, 890.4K pulls, 7b params — An extension of Mistral to support context windows of 64K or 128K.
+- [ ] **nexusraven** — 2 years ago, 885.6K pulls, 13b params — Nexus Raven is a 13B instruction tuned model for function calling tasks.
+- [ ] **bakllava** — 2 years ago, 878.1K pulls, 7b params — BakLLaVA is a multimodal model consisting of the Mistral 7B base model augmented with the LLaVA  architecture.
+- [ ] **meditron** — 2 years ago, 825.7K pulls, 7b params — Open-source medical large language model adapted from Llama 2 to the medical domain.
+- [ ] **tinydolphin** — 2 years ago, 716.8K pulls, 1.1b params — An experimental 1.1B parameter model trained on the new Dolphin 2.8 dataset by Eric Hartford and based on TinyLlama.
+- [ ] **codegeex4** — 2 years ago, 683K pulls, 9b params — A versatile model for AI software development scenarios, including code completion.
+- [ ] **mistral-openorca** — 2 years ago, 673K pulls, 7b params — Mistral OpenOrca is a 7 billion parameter model, fine-tuned on top of the Mistral 7B model using the OpenOrca dataset.
+- [ ] **medllama2** — 2 years ago, 661.9K pulls, 7b params — Fine-tuned Llama 2 model to answer medical questions based on an open source medical dataset.
+- [ ] **wizardlm-uncensored** — 2 years ago, 636.2K pulls, 13b params — Uncensored version of Wizard LM model
+- [ ] **codeup** — 2 years ago, 587.6K pulls, 13b params — Great code generation model based on Llama2.
+- [ ] **megadolphin** — 2 years ago, 561.9K pulls, 120b params — MegaDolphin-2.2-120b is a transformation of Dolphin-2.2-70b created by interleaving the model with itself.
+- [ ] **everythinglm** — 2 years ago, 558.5K pulls, 13b params — Uncensored Llama2 based model with support for a 16K context window.
+- [ ] **magicoder** — 2 years ago, 547.8K pulls, 7b params — 🎩 Magicoder is a family of 7B parameter models trained on 75K synthetic instruction data using OSS-Instruct, a novel approach to enlightening LLMs with open-source code snippets.
+- [ ] **mathstral** — 2 years ago, 541.9K pulls, 7b params — MathΣtral: a 7B model designed for math reasoning and scientific discovery by Mistral AI.
+- [ ] **nuextract** — 2 years ago, 534K pulls, 3.8b params — A 3.8B model fine-tuned on a private high-quality synthetic dataset for information extraction, based on Phi-3.
+- [ ] **falcon2** — 2 years ago, 533.8K pulls, 11b params — Falcon2 is an 11B parameters causal decoder-only model built by TII and trained over 5T tokens.
+- [ ] **notus** — 2 years ago, 532.6K pulls, 7b params — A 7B chat model fine-tuned with high-quality data and based on Zephyr.
+- [ ] **notux** — 2 years ago, 531.4K pulls, 8x7b params — A top-performing mixture of experts model, fine-tuned with high-quality data.
+- [ ] **stablelm-zephyr** — 2 years ago, 526.1K pulls, 3b params — A lightweight chat model allowing accurate, and responsive output without requiring high-end hardware.
+- [ ] **duckdb-nsql** — 2 years ago, 520.7K pulls, 7b params — 7B parameter text-to-SQL model made by MotherDuck and Numbers Station.
+- [ ] **mistrallite** — 2 years ago, 517.2K pulls, 7b params — MistralLite is a fine-tuned model based on Mistral with enhanced capabilities of processing long contexts.
+- [ ] **firefunction-v2** — 2 years ago, 517K pulls, 70b params — An open weights function calling model based on Llama 3, competitive with GPT-4o function calling capabilities.
+- [ ] **wizard-vicuna** — 2 years ago, 511.2K pulls, 13b params — Wizard Vicuna is a 13B parameter model based on Llama 2 trained by MelodysDreamj.
+- [ ] **open-orca-platypus2** — 2 years ago, 503.5K pulls, 13b params — Merge of the Open Orca OpenChat model and the Garage-bAInd Platypus 2 model. Designed for chat and code generation.
+- [ ] **codebooga** — 2 years ago, 494K pulls, 34b params — A high-performing code instruct model created by merging two existing code models.
+- [ ] **goliath** — 2 years ago, 472.9K pulls, ? params — A language model created by combining two fine-tuned Llama 2 70B models into one.
+- [ ] **dbrx** — 2 years ago, 362.8K pulls, 132b params — DBRX is an open, general-purpose LLM created by Databricks.
+- [ ] **llava-phi3** — 2 years ago, 306.5K pulls, 3.8b params — A new small LLaVA model fine-tuned from Phi 3 Mini.
+- [ ] **alfred** — 2 years ago, 237.9K pulls, 40b params — A robust conversational model designed to be used for both chat and instruct use cases.
