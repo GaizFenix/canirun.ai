@@ -47,6 +47,7 @@ jobs:
           title: "chore: weekly Ollama model scrape (${{ github.run_id }})"
           body-path: out/missing-models.md
           branch: ollama-scrape-report
+          base: develop
           delete-branch: true
           add-paths: |
             out/ollama_models.json
