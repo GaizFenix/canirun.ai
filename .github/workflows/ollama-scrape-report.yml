@@ -5,12 +5,6 @@ name: Ollama catalog scrape report
 # packages/models/src/index.ts. It never writes AIModel entries itself —
 # a human reviews the checklist and adds entries by hand, since the
 # scraped data lacks fields like family/provider/description/license.
-#
-# KNOWN ISSUE: ollama.com's frontend was redesigned and scripts/scrape-ollama.ts's
-# HTML parsing (search page, /library/{slug}, /library/{slug}/tags) is currently
-# broken against the new markup — it will discover 0 models until the parser is
-# updated to match the new page structure. This workflow is wired up correctly
-# and will start producing useful reports as soon as that follow-up fix lands.
 
 on:
   schedule:

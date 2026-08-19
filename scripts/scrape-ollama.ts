@@ -135,22 +135,18 @@ function parseSize(text: string): number | null {
 function parseSearchPage(html: string): OllamaModel[] {
   const models: OllamaModel[] = [];
 
-  // Each model is in an <li x-test-model> containing an <a> with model info
-  // Split by x-test-model markers
-  const items = html.split(/x-test-model/);
+  // Each model card is anchored by <a href="/library/{slug}" class="group w-full">.
+  // Splitting on that marker gives us the slug directly and one chunk per card.
+  const parts = html.split(/<a href="\/library\/([^"]+)" class="group w-full">/);
 
-  for (let i = 1; i < items.length; i++) {
-    const item = items[i];
+  for (let i = 1; i < parts.length; i += 2) {
+    const slug = parts[i].trim();
+    const item = parts[i + 1] || "";
 
-    // Slug from x-test-search-response-title
-    const slugMatch = item.match(
-      /x-test-search-response-title[^>]*>([^<]+)/i
+    // Pulls — value span comes before the "Pulls" label span
+    const pullsMatch = item.match(
+      /<span\s*>([^<]+)<\/span>\s*<span class="hidden sm:flex">&nbsp;Pulls?<\/span>/i
     );
-    if (!slugMatch) continue;
-    const slug = slugMatch[1].trim();
-
-    // Pulls
-    const pullsMatch = item.match(/x-test-pull-count[^>]*>([^<]+)/i);
     let pulls: number | null = null;
     let pullsText: string | null = null;
     if (pullsMatch) {
@@ -175,12 +171,16 @@ function parseSearchPage(html: string): OllamaModel[] {
       if (CAPABILITY_KEYWORDS.has(cap)) capabilities.push(cap);
     }
 
-    // Tags count
-    const tagsMatch = item.match(/x-test-tag-count[^>]*>([^<]+)/i);
+    // Tags count — value span comes before the "Tag"/"Tags" label span
+    const tagsMatch = item.match(
+      /<span\s*>(\d+)<\/span>\s*<span class="hidden sm:flex">&nbsp;Tags?<\/span>/i
+    );
     const tagsCount = tagsMatch ? parseInt(tagsMatch[1].trim()) || null : null;
 
-    // Updated
-    const updMatch = item.match(/x-test-updated[^>]*>([^<]+)/i);
+    // Updated — "Updated" label span comes before the value span
+    const updMatch = item.match(
+      /<span class="hidden sm:flex">Updated&nbsp;<\/span>\s*<span\s*>([^<]+)<\/span>/i
+    );
     const updated = updMatch ? updMatch[1].trim() : null;
 
     models.push({
@@ -205,8 +205,8 @@ function parseSearchPage(html: string): OllamaModel[] {
 // ── Parse library page ────────────────────────────────────
 
 function parseLibrary(html: string, model: OllamaModel): void {
-  // Name from x-test-model-name
-  const nameMatch = html.match(/x-test-model-name[^>]*>([^<]+)/i);
+  // Name from the og:title meta tag (more stable than the nested page-body markup)
+  const nameMatch = html.match(/<meta\s+property="og:title"\s+content="([^"]+)"/i);
   if (nameMatch) model.name = nameMatch[1].trim();
 
   // Description from meta
@@ -215,9 +215,11 @@ function parseLibrary(html: string, model: OllamaModel): void {
   );
   if (metaMatch) model.description = metaMatch[1].trim();
 
-  // Pulls from x-test-pull-count
+  // Pulls — value span comes before the "Downloads" label span
   if (!model.pulls) {
-    const pullMatch = html.match(/x-test-pull-count[^>]*>([^<]+)/i);
+    const pullMatch = html.match(
+      /<span\s*>([^<]+)<\/span>\s*<span class="hidden sm:flex">&nbsp;Downloads<\/span>/i
+    );
     if (pullMatch) {
       const raw = pullMatch[1].trim();
       model.pulls_text = raw;
@@ -225,15 +227,18 @@ function parseLibrary(html: string, model: OllamaModel): void {
     }
   }
 
-  // Updated from x-test-updated
+  // Updated — "Updated" label span comes before the value span
   if (!model.updated) {
-    const updMatch = html.match(/x-test-updated[^>]*>([^<]+)/i);
+    const updMatch = html.match(
+      /<span class="hidden sm:flex">Updated&nbsp;<\/span>\s*<span\s*>([^<]+)<\/span>/i
+    );
     if (updMatch) model.updated = updMatch[1].trim();
   }
 
-  // Available parameter sizes from x-test-size spans
+  // Available parameter sizes from the hex-background size chips
   const sizes: string[] = [];
-  const sizePattern = /x-test-size[^>]*>([^<]+)/gi;
+  const sizePattern =
+    /<span[^>]*class="[^"]*bg-\[#[0-9a-fA-F]{3,8}\][^"]*"[^>]*>([^<]+)<\/span>/gi;
   let sm: RegExpExecArray | null;
   while ((sm = sizePattern.exec(html)) !== null) {
     sizes.push(sm[1].trim().toLowerCase());
