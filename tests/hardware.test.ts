@@ -157,6 +157,8 @@ describe("getGPUCategory", () => {
       ["A100", "NVIDIA Datacenter"],
       ["A100 40GB", "NVIDIA Datacenter"],
       ["H100", "NVIDIA Datacenter"],
+      ["GB300-WS", "NVIDIA Datacenter"],
+      ["GB300", "NVIDIA Datacenter"],
       ["GH200", "NVIDIA Datacenter"],
       ["DGX Spark", "NVIDIA Datacenter"],
       ["L40S", "NVIDIA Datacenter"],
@@ -189,6 +191,8 @@ describe("getGPUCategory", () => {
   describe("AMD GPUs", () => {
     it.each([
       ["RX 9070 XT", "AMD RX 9000"],
+      ["RX 9060 XT", "AMD RX 9000"],
+      ["RX 9060 XT 8GB", "AMD RX 9000"],
       ["RX 7900 XTX", "AMD RX 7000"],
       ["RX 6800 XT", "AMD RX 6000"],
       ["RX 5700 XT", "AMD RX 5000"],
@@ -196,6 +200,7 @@ describe("getGPUCategory", () => {
       ["Vega 64", "AMD Older"],
       ["Radeon 780M", "AMD Integrated"],
       ["Ryzen AI MAX+ 395", "AMD Integrated"],
+      ["Radeon AI PRO R9700", "AMD Pro"],
     ])("%s → %s", (name, expected) => {
       expect(getGPUCategory(name)).toBe(expected);
     });
@@ -205,6 +210,8 @@ describe("getGPUCategory", () => {
     it.each([
       ["Arc A770", "Intel Arc"],
       ["Arc A750", "Intel Arc"],
+      ["Arc Pro B60", "Intel Arc"],
+      ["Arc Pro B70", "Intel Arc"],
       ["Iris Xe", "Intel Integrated"],
       ["UHD 770", "Intel Integrated"],
     ])("%s → %s", (name, expected) => {
@@ -220,6 +227,16 @@ describe("matchGPU", () => {
     const result = matchGPU("NVIDIA GeForce RTX 4090");
     expect(result).not.toBeNull();
     expect(result!.vram).toBe(24);
+  });
+
+  it("matches NVIDIA GB300 datacenter renderer strings", () => {
+    const result = matchGPU("NVIDIA-GB300");
+    expect(result).toEqual({ vram: 288, bw: 8000, cores: 20480 });
+  });
+
+  it("matches NVIDIA GB300-WS renderer strings", () => {
+    const result = matchGPU("NVIDIA-GB300-WS");
+    expect(result).toEqual({ vram: 252, bw: 7100, cores: 20480 });
   });
 
   it("RTX 5000 Ada — matches the 32GB pro card, not a consumer card", () => {
@@ -268,10 +285,42 @@ describe("matchGPU", () => {
     expect(result!.vram).toBe(24);
   });
 
+  it("RX 9060 XT defaults to the 16 GB SKU when size is omitted", () => {
+    const result = matchGPU("AMD Radeon RX 9060 XT");
+    expect(result).not.toBeNull();
+    expect(result!.vram).toBe(16);
+    expect(result!.bw).toBe(320);
+    expect(result!.cores).toBe(2048);
+  });
+
+  it("RX 9060 XT 8GB matches the 8 GB SKU over the default 16 GB entry", () => {
+    const result = matchGPU("AMD Radeon RX 9060 XT 8GB");
+    expect(result).not.toBeNull();
+    expect(result!.vram).toBe(8);
+    expect(result!.bw).toBe(320);
+    expect(result!.cores).toBe(2048);
+  });
+
   it("matches Intel Arc", () => {
     const result = matchGPU("Intel(R) Arc(TM) A770 Graphics");
     expect(result).not.toBeNull();
     expect(result!.vram).toBe(16);
+  });
+
+  it("matches Intel Arc Pro B60", () => {
+    const result = matchGPU("Intel(R) Arc(TM) Pro B60 Graphics");
+    expect(result).not.toBeNull();
+    expect(result!.vram).toBe(24);
+    expect(result!.bw).toBe(456);
+    expect(result!.cores).toBe(2560);
+  });
+
+  it("matches Intel Arc Pro B70", () => {
+    const result = matchGPU("Intel Arc Pro B70");
+    expect(result).not.toBeNull();
+    expect(result!.vram).toBe(32);
+    expect(result!.bw).toBe(608);
+    expect(result!.cores).toBe(4096);
   });
 
   it("returns null for unknown GPUs", () => {
@@ -362,6 +411,58 @@ describe("cleanGPUName", () => {
 
 // ── Apple Silicon detection ──────────────────────────────────
 
+describe("catalog additions and shared memory", () => {
+  it("lists the Radeon AI PRO R9700 from AMD's specs", () => {
+    expect(GPU_DB["Radeon AI PRO R9700"]).toEqual({ vram: 32, bw: 640, cores: 4096 });
+    expect(matchGPU("AMD Radeon AI PRO R9700")?.vram).toBe(32);
+    expect(getDeviceOverrides("gpu:Radeon AI PRO R9700")).toMatchObject({
+      estimatedVRAM: 32,
+      memoryBandwidth: 640,
+      isUnifiedMemory: false,
+    });
+  });
+
+  it("treats catalog iGPUs as one shared pool", () => {
+    expect(getDeviceOverrides("gpu:Vega 7")).toMatchObject({
+      ramGB: 16,
+      memoryBandwidth: 51,
+      estimatedVRAM: null,
+      isUnifiedMemory: true,
+    });
+    expect(applyOverrides(makeHW({ systemRAM: 32 }), getDeviceOverrides("gpu:Vega 7")!).systemRAM).toBeNull();
+    const hw = makeHW({
+      isUnifiedMemory: true,
+      totalUsableRAM: 32,
+      ramGB: 32,
+      estimatedVRAM: null,
+      memoryBandwidth: 26,
+    });
+    expect(evaluateModel(16, hw)).toBe("can-run");
+    expect(evaluateModel(20, hw)).toBe("tight");
+    expect(evaluateModel(30, hw)).toBe("cannot-run");
+  });
+
+  it("scales fit and bandwidth across identical GPUs", () => {
+    const one = makeHW({ estimatedVRAM: 16, memoryBandwidth: 1000, systemRAM: null });
+    const two = makeHW({ estimatedVRAM: 16, memoryBandwidth: 1000, systemRAM: null, gpuCount: 2 });
+    expect(evaluateModel(24, one)).toBe("cannot-run");
+    expect(evaluateModel(24, two)).toBe("can-run");
+    expect(estimateTokensPerSecond(10, two)).toBe((estimateTokensPerSecond(10, one) ?? 0) * 2);
+  });
+
+  it("does not scale a shared-memory device by GPU count", () => {
+    const hw = makeHW({
+      isUnifiedMemory: true,
+      totalUsableRAM: 16,
+      memoryBandwidth: 50,
+      estimatedVRAM: 16,
+      gpuCount: 4,
+    });
+    expect(evaluateModel(20, hw)).toBe("cannot-run");
+    expect(estimateTokensPerSecond(8, hw)).toBe(estimateTokensPerSecond(8, { ...hw, gpuCount: 1 }));
+  });
+});
+
 describe("isAppleSiliconCheck", () => {
   it("detects Apple M1", () => {
     expect(isAppleSiliconCheck("Apple M1")).toBe(true);
@@ -369,6 +470,14 @@ describe("isAppleSiliconCheck", () => {
 
   it("detects Apple M4 Max", () => {
     expect(isAppleSiliconCheck("Apple M4 Max")).toBe(true);
+  });
+
+  it("detects Apple M6", () => {
+    expect(isAppleSiliconCheck("Apple M6")).toBe(true);
+  });
+
+  it("detects Apple M5 Ultra", () => {
+    expect(isAppleSiliconCheck("Apple M5 Ultra")).toBe(true);
   });
 
   it("detects generic Apple GPU", () => {
@@ -398,6 +507,20 @@ describe("matchApple", () => {
     const result = matchApple("Apple M4 Pro");
     expect(result).not.toBeNull();
     expect(result!.ram).toBe(APPLE_DB["m4 pro"].ram);
+  });
+
+  it("matches M6", () => {
+    const result = matchApple("Apple M6");
+    expect(result).not.toBeNull();
+    expect(result!.ram).toBe(APPLE_DB["m6"].ram);
+    expect(result!.bw).toBe(APPLE_DB["m6"].bw);
+  });
+
+  it("matches M5 Ultra instead of base M5", () => {
+    const result = matchApple("Apple M5 Ultra");
+    expect(result).not.toBeNull();
+    expect(result!.ram).toBe(APPLE_DB["m5 ultra"].ram);
+    expect(result!.bw).toBe(APPLE_DB["m5 ultra"].bw);
   });
 
   it("falls back to M1 for unknown Apple chip", () => {

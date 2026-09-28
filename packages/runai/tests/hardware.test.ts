@@ -2,10 +2,12 @@ import { describe, expect, test } from "vitest";
 import {
   enrichLinuxGpu,
   isWslEnvironment,
+  normalizePciAddress,
   parseCpuName,
   parseLspciGpu,
   parseMemTotalGB,
   parseNvidiaSmi,
+  selectVramForPci,
 } from "../src/hardware-linux";
 import { parseAppleChip, parseMacGpuProfile } from "../src/hardware-macos";
 
@@ -39,7 +41,32 @@ describe("Linux and WSL hardware parsing", () => {
     expect(parseLspciGpu("03:00.0 3D controller: NVIDIA Corporation AD104 [GeForce RTX 4070] (rev a1)")).toMatchObject({
       vendor: "NVIDIA",
       integrated: false,
+      pciAddress: "0000:03:00.0",
     });
+  });
+
+  test("prefers the discrete AMD GPU and keeps its PCI address", () => {
+    expect(parseLspciGpu(`
+00:02.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Cezanne [Radeon Vega 7]
+03:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Navi 21 [Radeon RX 6800] (rev c1)
+    `)).toMatchObject({
+      vendor: "AMD",
+      pciAddress: "0000:03:00.0",
+    });
+  });
+
+  test("reads VRAM for the matching DRM card", () => {
+    const cards = [
+      { pciAddress: "0000:04:00.0", vramBytes: 512 * 1024 * 1024 },
+      { pciAddress: "0000:03:00.0", vramBytes: 16 * 1024 * 1024 * 1024 },
+    ];
+    expect(normalizePciAddress("03:00.0")).toBe("0000:03:00.0");
+    expect(normalizePciAddress("00000000:03:00.0")).toBe("0000:03:00.0");
+    expect(selectVramForPci(cards, "03:00.0")).toBe(16384);
+    expect(selectVramForPci(cards, "0000:04:00.0")).toBe(512);
+    expect(selectVramForPci(cards, "0000:05:00.0")).toBeNull();
+    expect(selectVramForPci(cards, null)).toBeNull();
+    expect(selectVramForPci([{ pciAddress: null, vramBytes: 8 * 1024 * 1024 * 1024 }], null)).toBe(8192);
   });
 
   test("enriches laptop and integrated GPUs from the shared catalog", () => {
@@ -81,13 +108,34 @@ describe("Linux and WSL hardware parsing", () => {
       vendor: "AMD",
       integrated: false,
     }, null).vramMB).toBe(12288);
+    expect(enrichLinuxGpu({
+      name: "AMD Radeon RX 9060 XT",
+      vendor: "AMD",
+      integrated: false,
+    }, 16304)).toMatchObject({
+      vramMB: 16304,
+      bandwidthGBs: 320,
+      backend: "vulkan",
+    });
+    expect(enrichLinuxGpu({
+      name: "AMD Radeon RX 9060 XT",
+      vendor: "AMD",
+      integrated: false,
+    }, 16304, true)).toMatchObject({
+      backend: "rocm",
+    });
   });
 });
 
 describe("macOS hardware parsing", () => {
   test("does not classify an unknown Apple chip as M1", () => {
-    expect(parseAppleChip("Apple M6")).toBeNull();
+    expect(parseAppleChip("Apple M7")).toBeNull();
     expect(parseAppleChip("Apple M4 Pro")).toBe("m4 pro");
+  });
+
+  test("recognizes M6 and M5 Ultra", () => {
+    expect(parseAppleChip("Apple M6")).toBe("m6");
+    expect(parseAppleChip("Apple M5 Ultra")).toBe("m5 ultra");
   });
 
   test("parses Intel Mac display details", () => {

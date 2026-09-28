@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro"
 import NavHeader from "@/components/NavHeader.astro"
-import { models, getActiveParamsBillions, isCommercialLicense, getLicenseTier, getLineageSuccessor } from "@/data/models"
+import { models, getActiveParamsBillions, isDiffusionModel, isCommercialLicense, getLicenseTier, getLineageSuccessor } from "@/data/models"
 import { getLicenseSlug } from "@/data/licenses"
 import ollamaReadmes from "@/data/ollama-readmes.json"
 import { AA_BENCHMARKS, getAaBenchmark } from "@/data/aa-benchmarks"
@@ -37,6 +37,7 @@ export function getStaticPaths() {
 }
 
 const { model } = Astro.props
+const isDiffusion = isDiffusionModel(model)
 const ollamaSlug = model.ollamaId?.split(":")[0]
 const ollamaHref = ollamaSlug
   ? ollamaSlug.includes("/")
@@ -457,6 +458,7 @@ const modelFaqs = [
             class="space-y-2 font-mono text-[13px]"
             data-params={model.paramsBillions}
             data-active-params={getActiveParamsBillions(model)}
+            data-memory-profile={model.memoryProfile ?? "autoregressive"}
           >
             <p class="text-muted italic">Detecting...</p>
           </div>
@@ -546,7 +548,7 @@ const modelFaqs = [
             </>
           )}
           <p class={`font-mono text-xs text-muted ${(model.ollamaId || model.lmStudioId) ? "mt-4" : ""} mb-1`}>
-            llama.cpp / GGUF
+            {isDiffusion ? "ComfyUI / GGUF" : "llama.cpp / GGUF"}
           </p>
           <a
             href={`https://huggingface.co/models?search=${encodeURIComponent(model.name + " GGUF")}`}
@@ -557,6 +559,12 @@ const modelFaqs = [
             <IconDownload class="h-3 w-3 shrink-0" />
             Download GGUF from HuggingFace
           </a>
+          {isDiffusion && (
+            <p class="mt-2 font-mono text-[11px] leading-relaxed text-muted">
+              Diffusion GGUFs load through ComfyUI-GGUF, not llama.cpp, and cover
+              the denoiser only — the text encoder and VAE are separate downloads.
+            </p>
+          )}
         </div>
 
         <!-- Key specs -->
@@ -714,6 +722,9 @@ const modelFaqs = [
     applyOverrides,
     getDeviceOverrides,
     buildSelectOptions,
+    bandwidthIsLocked,
+    usesUnifiedMemory,
+    GPU_COUNT_OPTIONS,
     RAM_OPTIONS,
     BW_OPTIONS,
     GPU_DB,
@@ -721,7 +732,8 @@ const modelFaqs = [
     GRADES,
   } from "@/lib/hardware"
   import type { HardwareInfo, HardwareOverrides } from "@/lib/hardware"
-  import { fitSelectWidth, buildGroupedDeviceOptions } from "@/lib/hardware-ui"
+  import { fitSelectWidth, buildGroupedDeviceOptions, setSelectEnabled, openCustomNumberInput, CUSTOM_SELECT_VALUE } from "@/lib/hardware-ui"
+  import { enhanceDeviceSelect } from "@/lib/device-picker"
   import { DEVICE_CATEGORY_ORDER } from "@/lib/hardware"
 
   document.addEventListener('astro:page-load', () => {
@@ -752,7 +764,8 @@ const modelFaqs = [
 
     const paramsBillions = parseFloat(container.dataset.params || "0")
     const activeParamsBillions = parseFloat(container.dataset.activeParams || "0")
-    const evaluationOptions = { activeParamsBillions }
+    const memoryProfile = container.dataset.memoryProfile === "diffusion" ? "diffusion" as const : "autoregressive" as const
+    const evaluationOptions = { activeParamsBillions, memoryProfile }
     let detectedHW: HardwareInfo
     let currentHW: HardwareInfo
 
@@ -769,7 +782,18 @@ const modelFaqs = [
         const label = formatter(v) + (v === detected ? " ✱" : "")
         html += `<option value="${v}"${selected}>${label}</option>`
       }
+      html += `<option value="${CUSTOM_SELECT_VALUE}">Custom…</option>`
       html += "</select>"
+      return html
+    }
+
+    function buildCountSelect(count: number): string {
+      const selected = GPU_COUNT_OPTIONS.includes(count) ? count : 1
+      let html = `<select id="hw-count-select" class="hw-editable-select text-primary">`
+      for (const value of GPU_COUNT_OPTIONS) {
+        html += `<option value="${value}"${value === selected ? " selected" : ""}>×${value}</option>`
+      }
+      html += `</select>`
       return html
     }
 
@@ -800,7 +824,7 @@ const modelFaqs = [
       let comfortable: string | null = null
       let tight: string | null = null
       for (const quant of candidates) {
-        const { status } = evaluateModelComplete(quant.vram, hw, paramsBillions)
+        const { status } = evaluateModelComplete(quant.vram, hw, paramsBillions, evaluationOptions)
         if (status === "can-run" && !comfortable) comfortable = quant.name
         if ((status === "tight" || status === "can-run-slow") && !tight) tight = quant.name
       }
@@ -858,10 +882,17 @@ const modelFaqs = [
         ? `<div class="flex items-center justify-between"><span class="text-muted" data-tooltip="GB/s — How fast data moves to the processor. Higher = faster inference" data-tooltip-pos="bottom" tabindex="0" style="cursor:help">Bandwidth</span>${buildSelectHTML("hw-bw-select", BW_OPTIONS, detectedHW.memoryBandwidth, overrides.memoryBandwidth ?? effectiveBw, (v) => `~${v} GB/s`)}</div>`
         : ""
 
+      const countRow = usesUnifiedMemory(hw)
+        ? ""
+        : `<div class="flex items-center justify-between"><span class="text-muted" data-tooltip="Identical GPUs. VRAM and the speed estimate scale with this count. Mixed cards are not combined." data-tooltip-pos="bottom" tabindex="0" style="cursor:help">GPUs</span>${buildCountSelect(hw.gpuCount ?? overrides.gpuCount ?? 1)}</div>`
+
       let sysramRow = ""
       if (!hw.isMobile) {
-        if (hw.isAppleSilicon) {
-          sysramRow = `<div class="flex items-center justify-between"><span class="text-muted" data-tooltip="Unified memory — Apple Silicon shares RAM between CPU and GPU. No separate system RAM available for offloading" data-tooltip-pos="bottom" tabindex="0" style="cursor:help">RAM</span><span class="text-primary opacity-50">${hw.totalUsableRAM ?? "—"} GB</span></div>`
+        if (hw.isAppleSilicon || hw.isUnifiedMemory) {
+          const tip = hw.isAppleSilicon
+            ? "Unified memory — Apple Silicon shares RAM between CPU and GPU. No separate system RAM available for offloading"
+            : "Unified memory — this GPU shares system RAM. There is no separate VRAM to offload from"
+          sysramRow = `<div class="flex items-center justify-between"><span class="text-muted" data-tooltip="${tip}" data-tooltip-pos="bottom" tabindex="0" style="cursor:help">RAM</span><span class="text-primary opacity-50">${hw.totalUsableRAM ?? "—"} GB</span></div>`
         } else {
           const raw = detectedHW.deviceMemoryRaw
           const isGte8 = raw === null || raw >= 8
@@ -883,6 +914,7 @@ const modelFaqs = [
           <span class="text-muted">Device</span>
           ${deviceSelect}
         </div>
+        ${countRow}
         <div class="flex items-center justify-between">
           <span class="text-muted" data-tooltip="Video memory available for loading models. On Apple Silicon/iGPU, shared with system RAM" data-tooltip-pos="bottom" tabindex="0" style="cursor:help">VRAM</span>
           ${ramSelect}
@@ -902,8 +934,13 @@ const modelFaqs = [
       const ramEl = document.getElementById("hw-ram-select") as HTMLSelectElement
       const sysramEl = document.getElementById("hw-sysram-select") as HTMLSelectElement
       const bwEl = document.getElementById("hw-bw-select") as HTMLSelectElement
+      const countEl = document.getElementById("hw-count-select") as HTMLSelectElement | null
+      if (bwEl && bandwidthIsLocked(hw)) setSelectEnabled(bwEl, false)
 
-      if (deviceEl) fitSelectWidth(deviceEl)
+      if (deviceEl) {
+        fitSelectWidth(deviceEl)
+        enhanceDeviceSelect(deviceEl)
+      }
       if (ramEl) fitSelectWidth(ramEl)
       if (sysramEl) fitSelectWidth(sysramEl)
       if (bwEl) fitSelectWidth(bwEl)
@@ -929,11 +966,28 @@ const modelFaqs = [
         renderSidebar(currentHW)
       })
 
+      function readSelectNumber(select: HTMLSelectElement | null): number | null {
+        if (!select || select.disabled || select.value === CUSTOM_SELECT_VALUE || select.value === "") return null
+        const value = Number(select.value)
+        return Number.isFinite(value) && value > 0 ? value : null
+      }
+
       function handleFieldChange() {
         const newOverrides = getHardwareOverrides()
-        if (ramEl?.value) newOverrides.ramGB = Number(ramEl.value)
-        if (sysramEl?.value) newOverrides.systemRAM = Number(sysramEl.value)
-        if (bwEl?.value) newOverrides.memoryBandwidth = Number(bwEl.value)
+        const memoryGB = readSelectNumber(ramEl)
+        if (memoryGB) {
+          newOverrides.ramGB = memoryGB
+          newOverrides.estimatedVRAM = usesUnifiedMemory(currentHW) ? null : memoryGB
+        }
+        const systemRAM = readSelectNumber(sysramEl)
+        if (systemRAM && !usesUnifiedMemory(currentHW)) newOverrides.systemRAM = systemRAM
+        const bandwidth = readSelectNumber(bwEl)
+        if (bandwidth && bwEl && !bwEl.disabled) newOverrides.memoryBandwidth = bandwidth
+        const gpuCount = readSelectNumber(countEl)
+        if (gpuCount && countEl && !countEl.disabled) {
+          if (gpuCount > 1) newOverrides.gpuCount = gpuCount
+          else delete newOverrides.gpuCount
+        }
         if (!newOverrides.device || newOverrides.device === "auto") {
           newOverrides.device = "custom"
         }
@@ -943,9 +997,30 @@ const modelFaqs = [
         renderSidebar(currentHW)
       }
 
-      ramEl?.addEventListener("change", handleFieldChange)
+      function bindNumericSelect(
+        select: HTMLSelectElement | null,
+        spec: { min: number; max: number; format: (value: number) => string },
+      ) {
+        select?.addEventListener("change", () => {
+          if (!select) return
+          if (select.value === CUSTOM_SELECT_VALUE) {
+            openCustomNumberInput(select, {
+              min: spec.min,
+              max: spec.max,
+              format: spec.format,
+              onCommit: () => handleFieldChange(),
+              onCancel: () => {},
+            })
+            return
+          }
+          handleFieldChange()
+        })
+      }
+
+      bindNumericSelect(ramEl, { min: 1, max: 1024, format: (value) => `${value} GB` })
+      bindNumericSelect(bwEl, { min: 1, max: 20000, format: (value) => `~${value} GB/s` })
       sysramEl?.addEventListener("change", handleFieldChange)
-      bwEl?.addEventListener("change", handleFieldChange)
+      countEl?.addEventListener("change", handleFieldChange)
     }
 
     async function init() {
