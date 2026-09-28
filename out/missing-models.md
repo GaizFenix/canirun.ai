@@ -1,7 +1,90 @@
-# Ollama catalog scrape — 2026-08-19
+# Ollama catalog scrape — 2026-09-28
 
-Coverage: 0/0 models in `packages/models/src/index.ts` (NaN%).
+Coverage: 32/238 models in `packages/models/src/index.ts` (13%).
 
-## New/updated models to review (0, newest first)
+## New/updated models to review (84, newest first)
 
-- [ ] 
+- [ ] **gemma4** — 5 days ago, 25.9M pulls, e2b params (default) — Gemma 4 models are designed to deliver frontier-level performance at each size. They are well-suited for reasoning, agentic workflows, coding, and multimodal understanding.
+- [ ] **nemotron-3.5-lightning** — 3 weeks ago, 188.9K pulls, 30b params (default) — NVIDIA Nemotron 3.5 Lightning is an open 30B mixture-of-experts (MoE) model with 3B active parameters built for always-on agents.
+- [ ] **qwen3.8-flash-next** — 3 weeks ago, 157.6K pulls, 125b params (default) — This experimental preview of the architecture that will underpin Qwen4.
+- [ ] **laguna-xs-2.1** — 3 weeks ago, 120K pulls, ? — Laguna XS 2.1 is a 33B total parameter Mixture-of-Experts model with 3B activated parameters per token designed for agentic coding and long-horizon work on a local machine.
+- [ ] **deepseek-v4-pro** — 1 month ago, 428.2K pulls, ? — DeepSeek-V4-Pro is a frontier Mixture-of-Experts model with a large context window and three reasoning modes.
+- [ ] **ornith-1.5** — 1 month ago, 351.5K pulls, 9b params (default) — Chirp Chirp! 🐦 We are introducing Ornith-1.5, a major step toward building foundation models through end-to-end self-improvement.
+- [ ] **laguna-s-2.1** — 1 month ago, 167.2K pulls, ? — Our most capable model to date, designed for long-horizon work. 70.2% on Terminal-Bench 2.1 at 118B-A8B.
+- [ ] **glm-5.3-flash** — 1 month ago, 155.8K pulls, ? — Z.ai&#39;s first natively multimodal model, approaching Claude Opus 4.8 on coding and agentic benchmarks with just 18B active parameters.
+- [ ] **glm-4.7-flash** — 3 months ago, 2M pulls, ? — As the strongest model in the 30B class, GLM-4.7-Flash offers a new option for lightweight deployment that balances performance and efficiency.
+- [ ] **minimax-m3** — 3 months ago, 516.5K pulls, ? — MiniMax M3: Coding &amp; Agentic Frontier. 1M context window. Native Multimodality.
+- [ ] **kimi-k2.7-code** — 3 months ago, 243.9K pulls, ? — Kimi K2.7 Code is Moonshot AI&#39;s coding-focused agentic model built upon Kimi K2.6, with substantial improvements on real-world long-horizon coding tasks and roughly 30% lower thinking-token usage.
+- [ ] **nemotron-3-ultra** — 3 months ago, 108.9K pulls, ? — NVIDIA Nemotron 3 Ultra is built for high-throughput reasoning and long-running agent workflows.
+- [ ] **granite4.1** — 4 months ago, 482.1K pulls, 3b params (default) — IBM Granite Models are a family of enterprise-ready, open foundation models that support multilingual capabilities, coding, retrieval-augmented generation (RAG), tool use, and structured JSON output. Released under Apache 2.0 license.
+- [ ] **mistral-medium-3.5** — 4 months ago, 418.2K pulls, 128b params (default) — Mistral Medium 3.5 is the first flagship model of Mistral AI that merged instruction-following, reasoning, and coding in a single set of 128B weights.
+- [ ] **lfm2.5** — 4 months ago, 164.5K pulls, 8b params (default) — LFM2.5-8B-A1B, an edge model built for fast, reliable tool calling on consumer hardware.
+- [ ] **nemotron3** — 5 months ago, 670K pulls, 33b params (default) — NVIDIA Nemotron 3 Nano Omni is a multimodal large language model that unifies video, audio, image, and text understanding to support enterprise-grade Q&amp;A, summarization, transcription, and document intelligence workflows.
+- [ ] **medgemma** — 5 months ago, 431.3K pulls, 4b params (default) — MedGemma is a collection of Gemma 3 variants that are trained for performance on medical text and image comprehension.
+- [ ] **medgemma1.5** — 5 months ago, 203.5K pulls, 4b params (default) — MedGemma 1.5 4B is an updated version of the MedGemma 4B model.
+- [ ] **nemotron-3-super** — 6 months ago, 3M pulls, 120b params (default) — NVIDIA Nemotron 3 Super is a 120B open MoE model activating just 12B parameters to deliver maximum compute efficiency and accuracy for complex multi-agent applications.
+- [ ] **minimax-m2.7** — 6 months ago, 2.4M pulls, ? — MiniMax&#39;s M2-series model for coding, agentic workflows, and professional productivity.
+- [ ] **nemotron-cascade-2** — 6 months ago, 149.8K pulls, 30b params (default) — An open 30B MoE model from NVIDIA with 3B activated parameters that delivers strong reasoning and agentic capabilities.
+- [ ] **glm-ocr** — 7 months ago, 7.6M pulls, ? — GLM-OCR is a multimodal OCR model for complex document understanding, built on the GLM-V encoder–decoder architecture.
+- [ ] **translategemma** — 8 months ago, 2.5M pulls, 4b params (default) — A new collection of open translation models built on Gemma 3, helping people communicate across 55 languages.
+- [ ] **lfm2.5-thinking** — 8 months ago, 1.3M pulls, 1.2b params (default) — LFM2.5 is a new family of hybrid models designed for on-device deployment.
+- [ ] **rnj-1** — 9 months ago, 511.1K pulls, 8b params (default) — Rnj-1 is a family of 8B parameter open-weight, dense models trained from scratch by Essential AI, optimized for code and STEM with capabilities on par with SOTA open-weight models.
+- [ ] **olmo-3** — 9 months ago, 462.7K pulls, 7b params (default) — Olmo is a series of Open language models designed to enable the science of language models. These models are pre-trained on the Dolma 3 dataset and post-trained on the Dolci datasets.
+- [ ] **devstral-2** — 9 months ago, 358.2K pulls, 123b params (default) — 123B model that excels at using tools to explore codebases, editing multiple files and power software engineering agents.
+- [ ] **olmo-3.1** — 9 months ago, 293.2K pulls, 32b params (default) — Olmo is a series of Open language models designed to enable the science of language models. These models are pre-trained on the Dolma 3 dataset and post-trained on the Dolci datasets.
+- [ ] **functiongemma** — 9 months ago, 193K pulls, 270m params (default) — FunctionGemma is a specialized version of Google&#39;s Gemma 3 270M model fine-tuned explicitly for function calling.
+- [ ] **mistral-large-3** — 9 months ago, 122.1K pulls, 675b params — A general-purpose multimodal mixture-of-experts model for production-grade tasks and enterprise workloads.
+- [ ] **deepseek-ocr** — 10 months ago, 540.8K pulls, 3b params (default) — DeepSeek-OCR is a vision-language model that can perform token-efficient OCR.
+- [ ] **cogito-2.1** — 10 months ago, 224.3K pulls, 671b params (default) — The Cogito v2.1 LLMs are instruction tuned generative models. All models are released under MIT license for commercial use.
+- [ ] **granite4** — 11 months ago, 1.5M pulls, 3b params (default) — Granite 4 features improved instruction following (IF) and tool-calling capabilities, making them more effective in enterprise applications.
+- [ ] **gpt-oss-safeguard** — 11 months ago, 158.7K pulls, 20b params (default) — gpt-oss-safeguard-20b and gpt-oss-safeguard-120b are safety reasoning models built-upon gpt-oss
+- [ ] **mistral** — 1 year ago, 33.7M pulls, 7b params (default) — The 7B model released by Mistral AI, updated to version 0.3.
+- [ ] **minicpm-v** — 1 year ago, 5.5M pulls, 8b params (default) — A series of multimodal LLMs (MLLMs) designed for vision-language understanding.
+- [ ] **llama3.2-vision** — 1 year ago, 5.4M pulls, 11b params (default) — Llama 3.2 Vision is a collection of instruction-tuned image reasoning generative models in 11B and 90B sizes.
+- [ ] **qwen2.5vl** — 1 year ago, 5.2M pulls, 7b params (default) — Flagship vision-language model of Qwen and also a significant leap from the previous Qwen2-VL.
+- [ ] **dolphin3** — 1 year ago, 4.1M pulls, 8b params (default) — Dolphin 3.0 Llama 3.1 8B 🐬 is the next generation of the Dolphin series of instruct-tuned models designed to be the ultimate general purpose local model, enabling coding, math, agentic, function calling, and general use cases.
+- [ ] **smollm2** — 1 year ago, 4M pulls, 1.7b params (default) — SmolLM2 is a family of compact language models available in three size: 135M, 360M, and 1.7B parameters.
+- [ ] **deepseek-v3** — 1 year ago, 3.8M pulls, 671b params (default) — A strong Mixture-of-Experts (MoE) language model with 671B total parameters with 37B activated for each token.
+- [ ] **olmo2** — 1 year ago, 3.8M pulls, 7b params (default) — OLMo 2 is a new family of 7B and 13B models trained on up to 5T tokens. These models are on par with or better than equivalently sized fully open models, and competitive with open-weight models such as Llama 3.1 on English academic benchmarks.
+- [ ] **granite3.1-moe** — 1 year ago, 3M pulls, 3b params (default) — The IBM Granite 1B and 3B models are long-context mixture of experts (MoE) Granite models from IBM designed for low latency usage.
+- [ ] **falcon3** — 1 year ago, 2.6M pulls, 7b params (default) — A family of efficient AI models under 10B parameters performant in science, math, and coding through innovative training techniques.
+- [ ] **mistral-small3.2** — 1 year ago, 2.5M pulls, 24b params (default) — An update to Mistral Small that improves on function calling, instruction following, and less repetition errors.
+- [ ] **qwq** — 1 year ago, 2.3M pulls, 32b params (default) — QwQ is the reasoning model of the Qwen series.
+- [ ] **gemma3n** — 1 year ago, 2.2M pulls, e2b params (default) — Gemma 3n models are designed for efficient execution on everyday devices such as laptops, tablets or phones.
+- [ ] **cogito** — 1 year ago, 2.1M pulls, 8b params (default) — Cogito v1 Preview is a family of hybrid reasoning models by Deep Cogito that outperform the best available open models of the same size, including counterparts from LLaMA, DeepSeek, and Qwen across most standard benchmarks.
+- [ ] **dolphin-mixtral** — 1 year ago, 1.9M pulls, 8x7b params (default) — Uncensored, 8x7b and 8x22b fine-tuned models based on the Mixtral mixture of experts models that excels at coding tasks. Created by Eric Hartford.
+- [ ] **phi4-reasoning** — 1 year ago, 1.7M pulls, 14b params (default) — Phi 4 reasoning and reasoning plus are 14-billion parameter open-weight reasoning models that rival much larger models on complex reasoning tasks.
+- [ ] **hermes3** — 1 year ago, 1.7M pulls, 8b params (default) — Hermes 3 is the latest version of the flagship Hermes series of LLMs by Nous Research
+- [ ] **magistral** — 1 year ago, 1.5M pulls, 24b params (default) — Magistral is a small, efficient reasoning model with 24B parameters.
+- [ ] **phi4-mini** — 1 year ago, 1.5M pulls, 3.8b params (default) — Phi-4-mini brings significant enhancements in multilingual support, reasoning, and mathematics, and now, the long-awaited function calling feature is finally supported.
+- [ ] **deepscaler** — 1 year ago, 1.3M pulls, 1.5b params (default) — A fine-tuned version of Deepseek-R1-Distilled-Qwen-1.5B that surpasses the performance of OpenAI’s o1-preview with just 1.5B parameters on popular math evaluations.
+- [ ] **mistral-large** — 1 year ago, 1.3M pulls, 123b params (default) — Mistral Large 2 is Mistral&#39;s new flagship model that is significantly more capable in code generation, mathematics, and reasoning with 128k context window and support for dozens of languages.
+- [ ] **openthinker** — 1 year ago, 1.2M pulls, 7b params (default) — A fully open-source family of reasoning models built using a dataset derived by distilling DeepSeek-R1.
+- [ ] **granite3.3** — 1 year ago, 1.1M pulls, 8b params (default) — IBM Granite 2B and 8B models are 128K context length language models that have been fine-tuned for improved reasoning and instruction-following capabilities.
+- [ ] **llama-guard3** — 1 year ago, 1.1M pulls, 8b params (default) — Llama Guard 3 is a series of models fine-tuned for content safety classification of LLM inputs and responses.
+- [ ] **devstral** — 1 year ago, 1M pulls, 24b params (default) — Devstral: the best open source model for coding agents
+- [ ] **granite3.2-vision** — 1 year ago, 1M pulls, 2b params (default) — A compact and efficient vision-language model, specifically designed for visual document understanding, enabling automated content extraction from tables, charts, infographics, plots, diagrams, and more.
+- [ ] **granite3.1-dense** — 1 year ago, 1M pulls, 8b params (default) — The IBM Granite 2B and 8B models are text-only dense LLMs trained on over 12 trillion tokens of data, demonstrated significant improvements over their predecessors in performance and speed in IBM’s initial testing.
+- [ ] **aya-expanse** — 1 year ago, 1M pulls, 8b params (default) — Cohere For AI&#39;s language models trained to perform well across 23 different languages.
+- [ ] **granite3-dense** — 1 year ago, 1M pulls, 2b params (default) — The IBM Granite 2B and 8B models are designed to support tool-based use cases and support for retrieval augmented generation (RAG), streamlining code generation, translation and bug fixing.
+- [ ] **granite3-moe** — 1 year ago, 967.7K pulls, 1b params (default) — The IBM Granite 1B and 3B models are the first mixture of experts (MoE) Granite models from IBM designed for low latency usage.
+- [ ] **deepcoder** — 1 year ago, 957.2K pulls, 14b params (default) — DeepCoder is a fully open-Source 14B coder model at O3-mini level, with a 1.5B version also available.
+- [ ] **shieldgemma** — 1 year ago, 951.4K pulls, 9b params (default) — ShieldGemma is set of instruction tuned models for evaluating the safety of text prompt input and text output responses against a set of defined safety policies.
+- [ ] **mistral-small3.1** — 1 year ago, 793K pulls, 24b params (default) — Building upon Mistral Small 3, Mistral Small 3.1 (2503) adds state-of-the-art vision understanding and enhances long context capabilities up to 128k tokens without compromising text performance.
+- [ ] **exaone-deep** — 1 year ago, 772.6K pulls, 7.8b params (default) — EXAONE Deep exhibits superior capabilities in various reasoning tasks including math and coding benchmarks, ranging from 2.4B to 32B parameters developed and released by LG AI Research.
+- [ ] **deepseek-v3.1** — 1 year ago, 730.4K pulls, 671b params (default) — DeepSeek-V3.1-Terminus is a hybrid model that supports both thinking mode and non-thinking mode.
+- [ ] **opencoder** — 1 year ago, 655.3K pulls, 8b params (default) — OpenCoder is an open and reproducible code LLM family which includes 1.5B and 8B models, supporting chat in English and Chinese languages.
+- [ ] **nemotron** — 1 year ago, 631.7K pulls, 70b params (default) — Llama-3.1-Nemotron-70B-Instruct is a large language model customized by NVIDIA to improve the helpfulness of LLM generated responses to user queries.
+- [ ] **nous-hermes2-mixtral** — 1 year ago, 598K pulls, 8x7b params (default) — The Nous Hermes 2 model from Nous Research, now trained over Mixtral.
+- [ ] **athene-v2** — 1 year ago, 596.8K pulls, 72b params (default) — Athene-V2 is a 72B parameter model which excels at code completion, mathematics, and log extraction tasks.
+- [ ] **exaone3.5** — 1 year ago, 566.3K pulls, 7.8b params (default) — EXAONE 3.5 is a collection of instruction-tuned bilingual (English and Korean) generative models ranging from 2.4B to 32B parameters, developed and released by LG AI Research.
+- [ ] **granite3.2** — 1 year ago, 461.1K pulls, 8b params (default) — Granite-3.2 is a family of long-context AI models from IBM Granite fine-tuned for thinking capabilities.
+- [ ] **r1-1776** — 1 year ago, 425.6K pulls, 70b params (default) — A version of the DeepSeek-R1 model that has been post trained to provide unbiased, accurate, and factual information by Perplexity.
+- [ ] **sailor2** — 1 year ago, 420K pulls, 8b params (default) — Sailor2 are multilingual language models made for South-East Asia. Available in 1B, 8B, and 20B parameter sizes.
+- [ ] **tulu3** — 1 year ago, 403.3K pulls, 8b params (default) — Tülu 3 is a leading instruction following model family, offering fully open-source data, code, and recipes by the The Allen Institute for AI.
+- [ ] **granite3-guardian** — 1 year ago, 341.3K pulls, 2b params (default) — The IBM Granite Guardian 3.0 2B and 8B models are designed to detect risks in prompts and/or responses.
+- [ ] **command-r7b** — 1 year ago, 328.1K pulls, 7b params (default) — The smallest model in Cohere&#39;s R series delivers top-tier speed, efficiency, and quality to build powerful AI applications on commodity GPUs and edge devices.
+- [ ] **smallthinker** — 1 year ago, 262.2K pulls, 3b params (default) — A new small reasoning model fine-tuned from the Qwen 2.5 3B Instruct model.
+- [ ] **command-a** — 1 year ago, 230.9K pulls, 111b params (default) — 111 billion parameter model optimized for demanding enterprises that require fast, secure, and high-quality AI
+- [ ] **marco-o1** — 1 year ago, 215.3K pulls, 7b params (default) — An open large reasoning model for real-world solutions by the Alibaba International Digital Commerce Group (AIDC-AI).
+- [ ] **command-r7b-arabic** — 1 year ago, 206.4K pulls, 7b params (default) — A new state-of-the-art version of the lightweight Command R7B model that excels in advanced Arabic language capabilities for enterprises in the Middle East and Northern Africa.
