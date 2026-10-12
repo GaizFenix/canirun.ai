@@ -1,4 +1,4 @@
-# Ollama catalog scrape — 2026-08-19
+# Ollama catalog scrape — 2026-10-12
 
 Coverage: 0/0 models in `packages/models/src/index.ts` (NaN%).
 
